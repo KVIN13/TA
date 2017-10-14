@@ -52,15 +52,15 @@ begin
   randomize;
   writeln('Enter number of elements');
   readln(n);
-  {Rewrite(masN);
+  Rewrite(masN);
   SetLength(arrN, n);
-  for i:=0 to n do
+  for i:=0 to high(arrN) do
   begin
     arrN[i] := random(100)+100;
     str := IntToStr(arrN[i]);
     write(masN, str);
   end;
-  CloseFile(masN);  }
+  CloseFile(masN);  
   rewrite(fullmas);
   for i:=0 to 99999 do
   begin
