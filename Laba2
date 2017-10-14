@@ -11,7 +11,7 @@ procedure qSort(var ar: array of integer);
       m, wsp: integer;
   begin
     repeat
-      i:=low; j:=high; m:=ar[(i+j) div 2];  // Взятие среднего опорного элемента
+      i:=low; j:=high; m:=ar[(i+j) div 2]; // Âçÿòèå ñðåäíåãî îïîðíîãî ýëåìåíòà
       repeat
         while ar[i]<m do Inc(i);
         while ar[j]>m do Dec(j);
@@ -20,18 +20,52 @@ procedure qSort(var ar: array of integer);
           Inc(i); Dec(j);
          end;
       until i>j;
-    if (j - low) < (high - i) then begin // Сравнение размеров выделенных подмассивов
-        if low < j then sort(ar, low, j); // Если первый подмассив меньше - он сортируется рекурсивно,
-        low := i;                          // а для следующего прохода цикла выбирается второй подмассив.
+    if (j - low) < (high - i) then begin // Ñðàâíåíèå ðàçìåðîâ âûäåëåííûõ ïîäìàññèâîâ
+        if low < j then sort(ar, low, j); // Åñëè ïåðâûé ïîäìàññèâ ìåíüøå - îí ñîðòèðóåòñÿ ðåêóðñèâíî,
+        low := i;                          // à äëÿ ñëåäóþùåãî ïðîõîäà öèêëà âûáèðàåòñÿ âòîðîé ïîäìàññèâ.
         end
-    else begin // в противном случае всё наоборот
-        if i < high then sort(ar, i, high); // // Рекурсивно сортируется второй подмассив,
-        high := j;                           // а в следующем проходе цикла - первый.
+    else begin // â ïðîòèâíîì ñëó÷àå âñ¸ íàîáîðîò
+        if i < high then sort(ar, i, high); // Ðåêóðñèâíî ñîðòèðóåòñÿ âòîðîé ïîäìàññèâ,
+        high := j;                           // à â ñëåäóþùåì ïðîõîäå öèêëà - ïåðâûé.
     end;
     until low = high;
   end;
 begin
   sort(ar, 0, High(ar));
+end;
+procedure partQSort(arr: array of integer; fst, last: integer);
+var sorted, parSorted: textfile;
+    t1, t2: TDateTime;
+    str: string;
+    i,j,k: integer;
+begin
+  Assign(sorted, 'D:\DelphiFiles\sorted.txt');
+  Assign(parSorted, 'D:\DelphiFiles\parSorted.txt');
+  for i := fst to last-1 do
+    for j := 1 to last-i do
+      if arr[j] > arr[j+1] then begin
+        k := arr[j];
+        arr[j] := arr[j+1];
+        arr[j+1] := k;
+      end;
+  rewrite(parSorted);
+  for i:=0 to high(arr) do
+  begin
+    str := IntToStr(arr[i]);
+    writeln(parSorted, str);
+  end;
+  close(parSorted);
+  t1:=Now();
+  qSort(arr);
+  t2:=Now();
+  writeln('Time of sorting = ',MillisecondsBetween(t1,t2));
+  rewrite(sorted);
+  for i:=0 to high(arr) do
+  begin
+    str := IntToStr(arr[i]);
+    writeln(sorted, str);
+  end;
+  close(sorted);
 end;
 var menu, n, i: integer;
     str: string;
@@ -52,15 +86,15 @@ begin
   randomize;
   writeln('Enter number of elements');
   readln(n);
-  Rewrite(masN);
   SetLength(arrN, n);
+  rewrite(masN);
   for i:=0 to high(arrN) do
   begin
     arrN[i] := random(100)+100;
     str := IntToStr(arrN[i]);
-    write(masN, str);
+    writeln(masN, str);
   end;
-  CloseFile(masN);  
+  close(masN);
   rewrite(fullmas);
   for i:=0 to 99999 do
   begin
@@ -80,12 +114,18 @@ begin
          writeln('1. Sort by part 2. Sort partially sorted 3. Reverse sort  4. Sort N array 5. Back to general menu');
          readln(menu);
          case menu of
+          2: begin
+              partQSort(arrN, 5, 9);
+          end;
           4: begin
-              qSort(arr);
+              t1:=Now();
+              qSort(arrN);
+              t2:=Now();
+              writeln('Time of sorting = ',MillisecondsBetween(t1,t2));
               rewrite(sorted);
-              for i:=0 to 99999 do
+              for i:=0 to high(arrN) do
               begin
-                str := IntToStr(arr[i]);
+                str := IntToStr(arrN[i]);
                 writeln(sorted, str);
               end;
               close(sorted);
