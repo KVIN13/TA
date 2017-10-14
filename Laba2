@@ -11,22 +11,13 @@ procedure qSort(var ar: array of integer);
       m, wsp: integer;
   begin
     repeat
-      i:=low; j:=high; m:=ar[(i+j) div 2]; // Âçÿòèå ñðåäíåãî îïîðíîãî ýëåìåíòà
-      repeat
-        while ar[i]<m do Inc(i);
-        while ar[j]>m do Dec(j);
-        if i<=j then begin
-          wsp:=ar[i]; ar[i]:=ar[j]; ar[j]:=wsp;
-          Inc(i); Dec(j);
-         end;
-      until i>j;
-    if (j - low) < (high - i) then begin // Ñðàâíåíèå ðàçìåðîâ âûäåëåííûõ ïîäìàññèâîâ
-        if low < j then sort(ar, low, j); // Åñëè ïåðâûé ïîäìàññèâ ìåíüøå - îí ñîðòèðóåòñÿ ðåêóðñèâíî,
-        low := i;                          // à äëÿ ñëåäóþùåãî ïðîõîäà öèêëà âûáèðàåòñÿ âòîðîé ïîäìàññèâ.
-        end
-    else begin // â ïðîòèâíîì ñëó÷àå âñ¸ íàîáîðîò
-        if i < high then sort(ar, i, high); // Ðåêóðñèâíî ñîðòèðóåòñÿ âòîðîé ïîäìàññèâ,
-        high := j;                           // à â ñëåäóþùåì ïðîõîäå öèêëà - ïåðâûé.
+if (j - low) < (high - i) then begin // Сравнение размеров выделенных подмассивов
+        if low < j then sort(ar, low, j); // Если первый подмассив меньше - он сортируется рекурсивно,
+        low := i;                          // а для следующего прохода цикла выбирается второй подмассив.
+          end
+     else begin // в противном случае всё наоборот
+        if i < high then sort(ar, i, high); // // Рекурсивно сортируется второй подмассив,
+       high := j;                           // а в следующем проходе цикла - первый.
     end;
     until low = high;
   end;
