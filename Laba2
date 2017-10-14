@@ -1,0 +1,98 @@
+program Laba2;
+
+{$APPTYPE CONSOLE}
+
+uses
+  SysUtils,
+  DateUtils;
+procedure qSort(var ar: array of integer);
+  procedure sort(var ar: array of integer; low, high: integer);
+  var i, j: integer;
+      m, wsp: integer;
+  begin
+    repeat
+      i:=low; j:=high; m:=ar[(i+j) div 2];  // Взятие среднего опорного элемента
+      repeat
+        while ar[i]<m do Inc(i);
+        while ar[j]>m do Dec(j);
+        if i<=j then begin
+          wsp:=ar[i]; ar[i]:=ar[j]; ar[j]:=wsp;
+          Inc(i); Dec(j);
+         end;
+      until i>j;
+    if (j - low) < (high - i) then begin // Сравнение размеров выделенных подмассивов
+        if low < j then sort(ar, low, j); // Если первый подмассив меньше - он сортируется рекурсивно,
+        low := i;                          // а для следующего прохода цикла выбирается второй подмассив.
+        end
+    else begin // в противном случае всё наоборот
+        if i < high then sort(ar, i, high); // // Рекурсивно сортируется второй подмассив,
+        high := j;                           // а в следующем проходе цикла - первый.
+    end;
+    until low = high;
+  end;
+begin
+  sort(ar, 0, High(ar));
+end;
+var menu, n, i: integer;
+    str: string;
+    t1, t2 : TDateTime;
+    arrN: array of integer;
+    arr: array [0..99999] of integer;
+    masN, fullmas, sorted, sorted10, sorted100, sortedTh, sortedTen: textfile;
+begin
+  //SetConsoleCP(1251);
+  //SetConsoleOutPutCP(1251);
+  Assign(masN, 'D:\DelphiFiles\masN.txt');
+  Assign(fullmas, 'D:\DelphiFiles\fullmas.txt');
+  Assign(sorted, 'D:\DelphiFiles\sorted.txt');
+  Assign(sorted100, 'D:\DelphiFiles\sorted100.txt');
+  Assign(sorted10, 'D:\DelphiFiles\sorted10.txt');
+  Assign(sortedTh, 'D:\DelphiFiles\sortedTh.txt');
+  Assign(sortedTen, 'D:\DelphiFiles\sortedTen.txt');
+  randomize;
+  writeln('Enter number of elements');
+  readln(n);
+  {Rewrite(masN);
+  SetLength(arrN, n);
+  for i:=0 to n do
+  begin
+    arrN[i] := random(100)+100;
+    str := IntToStr(arrN[i]);
+    write(masN, str);
+  end;
+  CloseFile(masN);  }
+  rewrite(fullmas);
+  for i:=0 to 99999 do
+  begin
+    arr[i] := random(100)+100;
+    str := IntToStr(arr[i]);
+    writeln(fullmas, str);
+  end;
+  close(fullmas);
+  while true do
+  begin
+    writeln('1. Quick sort 2. Selection sort 3. Insertion sort 4. Bubble sort');
+    readln(menu);
+    case menu of
+    1: begin
+        while true do
+        begin
+         writeln('1. Sort by part 2. Sort partially sorted 3. Reverse sort  4. Sort N array 5. Back to general menu');
+         readln(menu);
+         case menu of
+          4: begin
+              qSort(arr);
+              rewrite(sorted);
+              for i:=0 to 99999 do
+              begin
+                str := IntToStr(arr[i]);
+                writeln(sorted, str);
+              end;
+              close(sorted);
+             end;
+         end;
+        end;
+       end;
+   end;
+  end;
+end.
