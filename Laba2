@@ -5,40 +5,55 @@ program Laba2;
 uses
   SysUtils,
   DateUtils;
-procedure qSort(var ar: array of integer);
+  procedure readFull(var arr: array of integer; fullmas: textfile);
+  var str: string;
+  begin
+    Assign(fullmas, 'D:\DelphiFiles\fullmas.txt');
+    reset(fullmas);
+    for i:=0 to 99999 do
+    begin
+      readln(fullmas, str);
+      arr[i] := StrToInt(str);
+    end;
+  end;
   procedure sort(var ar: array of integer; low, high: integer);
   var i, j: integer;
       m, wsp: integer;
   begin
     repeat
-if (j - low) < (high - i) then begin // Сравнение размеров выделенных подмассивов
-        if low < j then sort(ar, low, j); // Если первый подмассив меньше - он сортируется рекурсивно,
-        low := i;                          // а для следующего прохода цикла выбирается второй подмассив.
-          end
-     else begin // в противном случае всё наоборот
-        if i < high then sort(ar, i, high); // // Рекурсивно сортируется второй подмассив,
-       high := j;                           // а в следующем проходе цикла - первый.
+      i:=low; j:=high; m:=ar[(i+j) div 2]; // Âçÿòèå ñðåäíåãî îïîðíîãî ýëåìåíòà
+      repeat
+        while ar[i]<m do Inc(i);
+        while ar[j]>m do Dec(j);
+        if i<=j then begin
+          wsp:=ar[i]; ar[i]:=ar[j]; ar[j]:=wsp;
+          Inc(i); Dec(j);
+         end;
+      until i>j;
+    if (j - low) < (high - i) then begin // Ñðàâíåíèå ðàçìåðîâ âûäåëåííûõ ïîäìàññèâîâ
+        if low < j then sort(ar, low, j); // Åñëè ïåðâûé ïîäìàññèâ ìåíüøå - îí ñîðòèðóåòñÿ ðåêóðñèâíî,
+        low := i;                          // à äëÿ ñëåäóþùåãî ïðîõîäà öèêëà âûáèðàåòñÿ âòîðîé ïîäìàññèâ.
+        end
+    else begin // â ïðîòèâíîì ñëó÷àå âñ¸ íàîáîðîò
+        if i < high then sort(ar, i, high); // Ðåêóðñèâíî ñîðòèðóåòñÿ âòîðîé ïîäìàññèâ,
+        high := j;                           // à â ñëåäóþùåì ïðîõîäå öèêëà - ïåðâûé.
     end;
     until low = high;
   end;
+procedure qSort(var ar: array of integer);
+
 begin
   sort(ar, 0, High(ar));
 end;
-procedure partQSort(arr: array of integer; fst, last: integer);
+procedure partQSort(var arr: array of integer; fst, last: integer);
 var sorted, parSorted: textfile;
     t1, t2: TDateTime;
     str: string;
-    i,j,k: integer;
+    i: integer;
 begin
   Assign(sorted, 'D:\DelphiFiles\sorted.txt');
   Assign(parSorted, 'D:\DelphiFiles\parSorted.txt');
-  for i := fst to last-1 do
-    for j := 1 to last-i do
-      if arr[j] > arr[j+1] then begin
-        k := arr[j];
-        arr[j] := arr[j+1];
-        arr[j+1] := k;
-      end;
+  sort(arr, fst, last);
   rewrite(parSorted);
   for i:=0 to high(arr) do
   begin
@@ -105,8 +120,36 @@ begin
          writeln('1. Sort by part 2. Sort partially sorted 3. Reverse sort  4. Sort N array 5. Back to general menu');
          readln(menu);
          case menu of
+          1: begin
+              readFull(arr, fullmas);
+              qSort(arr);
+              rewrite(sorted);
+              for i:=0 to high(arr) do
+              begin
+                str := IntToStr(arr[i]);
+                writeln(sorted, str);
+              end;
+              close(sorted);
+              readFull(arr, fullmas);
+              for i:=0 to 99999 do
+              begin
+                if ( i mod 10000 = 0) or ( i =0) then
+                  sort(arr, i, i+9999);
+              end;
+              rewrite(sorted10);
+              for i:=0 to high(arr) do
+              begin
+                str := IntToStr(arr[i]);
+                writeln(sorted10, str);
+              end;
+              close(sorted);
+              readFull(arr, fullmas);
+
+          end;
           2: begin
-              partQSort(arrN, 5, 9);
+              writeln('Enter "i" and "j" for partial sorting');
+              readln(n); readln(i);
+              partQSort(arrN, n, i);
           end;
           4: begin
               t1:=Now();
