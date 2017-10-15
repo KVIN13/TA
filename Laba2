@@ -18,6 +18,30 @@ uses
       arr[i] := StrToInt(str);
     end;
   end;
+  procedure Reversesort(var ar: array of integer; low, high: integer);
+  var i, j: integer;
+      m, wsp: integer;
+  begin
+    repeat
+      i:=low; j:=high; m:=ar[(i+j) div 2]; // Âçÿòèå ñðåäíåãî îïîðíîãî ýëåìåíòà
+      repeat
+        while ar[i]>m do Inc(i);
+        while ar[j]<m do Dec(j);
+        if i<=j then begin
+          wsp:=ar[i]; ar[i]:=ar[j]; ar[j]:=wsp;
+          Inc(i); Dec(j);
+         end;
+      until i>j;
+    if (j - low) < (high - i) then begin // Ñðàâíåíèå ðàçìåðîâ âûäåëåííûõ ïîäìàññèâîâ
+        if low < j then Reversesort(ar, low, j); // Åñëè ïåðâûé ïîäìàññèâ ìåíüøå - îí ñîðòèðóåòñÿ ðåêóðñèâíî,
+        low := i;                          // à äëÿ ñëåäóþùåãî ïðîõîäà öèêëà âûáèðàåòñÿ âòîðîé ïîäìàññèâ.
+        end
+    else begin // â ïðîòèâíîì ñëó÷àå âñ¸ íàîáîðîò
+        if i < high then Reversesort(ar, i, high); // Ðåêóðñèâíî ñîðòèðóåòñÿ âòîðîé ïîäìàññèâ,
+        high := j;                           // à â ñëåäóþùåì ïðîõîäå öèêëà - ïåðâûé.
+    end;
+    until low = high;
+  end;
   procedure sort(var ar: array of integer; low, high: integer);
   var i, j: integer;
       m, wsp: integer;
@@ -80,13 +104,14 @@ var menu, n, i: integer;
     t1, t2 : TDateTime;
     arrN: array of integer;
     arr: array [0..99999] of integer;
-    masN, fullmas, sorted, sorted10, sorted100, sortedTh, sortedTen: textfile;
+    masN, fullmas, sorted, sorted10, sorted100, sortedTh, sortedTen, reverse: textfile;
 begin
   //SetConsoleCP(1251);
   //SetConsoleOutPutCP(1251);
   Assign(masN, 'D:\DelphiFiles\masN.txt');
   Assign(fullmas, 'D:\DelphiFiles\fullmas.txt');
   Assign(sorted, 'D:\DelphiFiles\sorted.txt');
+  Assign(reverse, 'D:\DelphiFiles\reverse.txt');
   Assign(sorted100, 'D:\DelphiFiles\sorted100.txt');
   Assign(sorted10, 'D:\DelphiFiles\sorted10.txt');
   Assign(sortedTh, 'D:\DelphiFiles\sortedTh.txt');
@@ -204,6 +229,20 @@ begin
               writeln('Enter "i" and "j" for partial sorting');
               readln(n); readln(i);
               partQSort(arrN, n, i);
+          end;
+          3: begin
+              readFull(arr);
+              t1:=Now();
+              Reversesort(arr, 0, high(arr));
+              t2:=Now();
+              rewrite(reverse);
+              for i:=0 to high(arr) do
+              begin
+                str := IntToStr(arr[i]);
+                writeln(reverse, str);
+              end;
+              close(reverse);
+              writeln('Time of sorting = ',MillisecondsBetween(t1,t2));
           end;
           4: begin
               t1:=Now();
