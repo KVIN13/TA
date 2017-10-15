@@ -1,12 +1,14 @@
-program Laba2;
+﻿program Laba2;
 
 {$APPTYPE CONSOLE}
 
 uses
   SysUtils,
   DateUtils;
-  procedure readFull(var arr: array of integer; fullmas: textfile);
+  procedure readFull(var arr: array of integer);
   var str: string;
+      i: integer;
+       fullmas: textfile;
   begin
     Assign(fullmas, 'D:\DelphiFiles\fullmas.txt');
     reset(fullmas);
@@ -121,8 +123,10 @@ begin
          readln(menu);
          case menu of
           1: begin
-              readFull(arr, fullmas);
+              readFull(arr);
+              t1:=Now();
               qSort(arr);
+              t2:=Now();
               rewrite(sorted);
               for i:=0 to high(arr) do
               begin
@@ -130,21 +134,71 @@ begin
                 writeln(sorted, str);
               end;
               close(sorted);
-              readFull(arr, fullmas);
+              writeln('Time of sorting = ',MillisecondsBetween(t1,t2));
+              readFull(arr);
+              t1:=Now();
               for i:=0 to 99999 do
               begin
-                if ( i mod 10000 = 0) or ( i =0) then
+                if ( i mod 10000 = 0) or ( i = 0) then
                   sort(arr, i, i+9999);
               end;
+              t2:=Now();
               rewrite(sorted10);
               for i:=0 to high(arr) do
               begin
                 str := IntToStr(arr[i]);
                 writeln(sorted10, str);
               end;
-              close(sorted);
-              readFull(arr, fullmas);
-
+              close(sorted10);
+              writeln('Time of sorting 10 parts= ',MillisecondsBetween(t1,t2));
+              readFull(arr);
+              t1:=Now();
+              for i:=0 to 99999 do
+              begin
+                if ( i mod 1000 = 0) or ( i = 0) then
+                  sort(arr, i, i+999);
+              end;
+              t2:=Now();
+              rewrite(sorted100);
+              for i:=0 to high(arr) do
+              begin
+                str := IntToStr(arr[i]);
+                writeln(sorted100, str);
+              end;
+              close(sorted100);
+              writeln('Time of sorting 100 parts = ',MillisecondsBetween(t1,t2));
+              readFull(arr);
+              t1:=Now();
+              for i:=0 to 99999 do
+              begin
+                if ( i mod 100 = 0) or ( i = 0) then
+                  sort(arr, i, i+99);
+              end;
+              t2:=Now();
+              rewrite(sortedTh);
+              for i:=0 to high(arr) do
+              begin
+                str := IntToStr(arr[i]);
+                writeln(sortedTh, str);
+              end;
+              close(sortedTh);
+              writeln('Time of sorting 1000 parts = ',MillisecondsBetween(t1,t2));
+              readFull(arr);
+              t1:=Now();
+              for i:=0 to 99999 do
+              begin
+                if ( i mod 10 = 0) or ( i = 0) then
+                  sort(arr, i, i+9);
+              end;
+              t2:=Now();
+              rewrite(sortedTen);
+              for i:=0 to high(arr) do
+              begin
+                str := IntToStr(arr[i]);
+                writeln(sortedTen, str);
+              end;
+              close(sortedTen);
+              writeln('Time of sorting 10000 parts = ',MillisecondsBetween(t1,t2));
           end;
           2: begin
               writeln('Enter "i" and "j" for partial sorting');
