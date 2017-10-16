@@ -5,10 +5,56 @@
 uses
   SysUtils,
   DateUtils;
+  procedure insertSort(arr: array of integer);
+  var min, i, t, j: integer;
+      sorted: textfile;
+      t1, t2: TDateTime;
+      str : string;
+  begin
+    Assign(sorted, 'D:\DelphiFiles\sorted.txt');
+    for i:=0 to high(arr) do
+      write(' ', arr[i]);
+    t1:=Now();
+    for i := 0 to high(arr) do begin
+    min := i;
+    for j := i + 1 to length(arr) do
+        if arr[min] > arr[j] then
+            min := j;
+    if min<>i then begin
+        t := arr[i];
+        arr[i] := arr[min];
+        arr[min] := t;
+    end;
+    end;
+    t2:=Now();
+    for i:=0 to high(arr) do
+      write(' ', arr[i]);
+    rewrite(sorted);
+    for i:=0 to high(arr) do
+    begin
+      str := IntToStr(arr[i]);
+      writeln(sorted, str);
+    end;
+    close(sorted);
+    writeln('Time of sorting = ',MillisecondsBetween(t1,t2));
+  end;
+  procedure readN(var arr: array of integer);
+  var str: string;
+      i: integer;
+      masN: textfile;
+  begin
+    Assign(masN, 'D:\DelphiFiles\masN.txt');
+    reset(masN);
+    for i:=0 to high(arr) do
+    begin
+      readln(masN, str);
+      arr[i] := StrToInt(str);
+    end;
+  end;
   procedure readFull(var arr: array of integer);
   var str: string;
       i: integer;
-       fullmas: textfile;
+      fullmas: textfile;
   begin
     Assign(fullmas, 'D:\DelphiFiles\fullmas.txt');
     reset(fullmas);
@@ -257,9 +303,27 @@ begin
               end;
               close(sorted);
              end;
+          5: begin
+              break;
+            end;
          end;
-        end;
+         end;
+         end;
+       2: begin
+          while true do
+          begin
+            writeln('1. Sort by parts 2. Sort N array 3. Back to general menu');
+            readln(menu);
+            case menu of
+            2: begin
+                readN(arrN);
+                insertSort(arrN);
+            end;
+
+
+         end;
        end;
    end;
   end;
+end;
 end.
