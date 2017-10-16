@@ -277,17 +277,25 @@ begin
               partQSort(arrN, n, i);
           end;
           3: begin
-              readFull(arr);
-              t1:=Now();
-              Reversesort(arr, 0, high(arr));
-              t2:=Now();
+              readN(arrN);
+              Reversesort(arrN, 0, high(arrN));
               rewrite(reverse);
-              for i:=0 to high(arr) do
+              for i:=0 to high(arrN) do
               begin
-                str := IntToStr(arr[i]);
+                str := IntToStr(arrN[i]);
                 writeln(reverse, str);
               end;
               close(reverse);
+              t1:=Now();
+              qSort(arrN);
+              t2:=Now();
+              rewrite(sorted);
+              for i:=0 to high(arrN) do
+              begin
+                str := IntToStr(arrN[i]);
+                writeln(sorted, str);
+              end;
+              close(sorted);
               writeln('Time of sorting = ',MillisecondsBetween(t1,t2));
           end;
           4: begin
@@ -315,6 +323,9 @@ begin
             writeln('1. Sort by parts 2. Sort N array 3. Back to general menu');
             readln(menu);
             case menu of
+            1: begin
+                    
+            end;
             2: begin
                 readN(arrN);
                 insertSort(arrN);
