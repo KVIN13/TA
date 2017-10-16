@@ -5,6 +5,21 @@
 uses
   SysUtils,
   DateUtils;
+  procedure insPart(var arr: array of integer; fst, lst: integer);
+  var min, i, t, j: integer;
+  begin
+    for i := fst to lst do begin
+    min := i;
+    for j := i + 1 to lst+1 do
+        if arr[min] > arr[j] then
+            min := j;
+    if min<>i then begin
+        t := arr[i];
+        arr[i] := arr[min];
+        arr[min] := t;
+    end;
+    end;
+  end;
   procedure insertSort(arr: array of integer);
   var min, i, t, j: integer;
       sorted: textfile;
@@ -324,7 +339,82 @@ begin
             readln(menu);
             case menu of
             1: begin
-                    
+                readN(arrN);
+                t1:=Now();
+                insPart(arr, 0, 99999);
+                t2:=Now();
+                writeln('Time of sorting(100000 el.) = ',MillisecondsBetween(t1,t2));
+                rewrite(sorted);
+                for i:=0 to 99999 do
+                begin
+                  str := IntToStr(arr[i]);
+                  writeln(sorted, str);
+                end;
+                close(sorted);
+                readFull(arr);
+                t1:=Now();
+                for i:=0 to 99999 do
+                begin
+                  if (i mod 10000 = 0) or (i = 0) then
+                    insPart(arr, i, i+9999);
+                end;
+                t2:=Now();
+                writeln('Time of sorting(10000 el.) = ',MillisecondsBetween(t1,t2));
+                rewrite(sorted10);
+                for i:=0 to high(arr) do
+                begin
+                  str := IntToStr(arr[i]);
+                  writeln(sorted10, str);
+                end;
+                close(sorted10);
+                readFull(arr);
+                t1:=Now();
+                for i:=0 to 99999 do
+                begin
+                  if (i mod 1000 = 0) or (i = 0) then
+                    insPart(arr, i, i+999);
+                end;
+                t2:=Now();
+                writeln('Time of sorting(1000 el.) = ',MillisecondsBetween(t1,t2));
+                rewrite(sorted100);
+                for i:=0 to high(arr) do
+                begin
+                  str := IntToStr(arr[i]);
+                  writeln(sorted100, str);
+                end;
+                close(sorted100);
+                readFull(arr);
+                t1:=Now();
+                for i:=0 to 99999 do
+                begin
+                  if (i mod 100 = 0) or (i = 0) then
+                    insPart(arr, i, i+99);
+                end;
+                t2:=Now();
+                writeln('Time of sorting(100 el.) = ',MillisecondsBetween(t1,t2));
+                rewrite(sortedTh);
+                for i:=0 to high(arr) do
+                begin
+                  str := IntToStr(arr[i]);
+                  writeln(sortedTh, str);
+                end;
+                close(sortedTh);
+                readFull(arr);
+                t1:=Now();
+                for i:=0 to 99999 do
+                begin
+                  if (i mod 10 = 0) or (i = 0) then
+                    insPart(arr, i, i+9);
+                end;
+                t2:=Now();
+                writeln('Time of sorting(10 el.) = ',MillisecondsBetween(t1,t2));
+                rewrite(sortedTen);
+                for i:=0 to high(arr) do
+                begin
+                  str := IntToStr(arr[i]);
+                  writeln(sortedTen, str);
+                end;
+                close(sortedTen);
             end;
             2: begin
                 readN(arrN);
