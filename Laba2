@@ -5,7 +5,7 @@
 uses
   SysUtils,
   DateUtils;
-  procedure insPart(var arr: array of integer; fst, lst: integer);
+  procedure selPart(var arr: array of integer; fst, lst: integer);
   var min, i, t, j: integer;
   begin
     for i := fst to lst do begin
@@ -20,7 +20,7 @@ uses
     end;
     end;
   end;
-  procedure insertSort(arr: array of integer);
+  procedure selectSort(arr: array of integer);
   var min, i, t, j: integer;
       sorted: textfile;
       t1, t2: TDateTime;
@@ -341,7 +341,7 @@ begin
             1: begin
                 readN(arrN);
                 t1:=Now();
-                insPart(arr, 0, 99999);
+                selPart(arr, 0, 99999);
                 t2:=Now();
                 writeln('Time of sorting(100000 el.) = ',MillisecondsBetween(t1,t2));
                 rewrite(sorted);
@@ -356,7 +356,7 @@ begin
                 for i:=0 to 99999 do
                 begin
                   if (i mod 10000 = 0) or (i = 0) then
-                    insPart(arr, i, i+9999);
+                    selPart(arr, i, i+9999);
                 end;
                 t2:=Now();
                 writeln('Time of sorting(10000 el.) = ',MillisecondsBetween(t1,t2));
@@ -372,7 +372,7 @@ begin
                 for i:=0 to 99999 do
                 begin
                   if (i mod 1000 = 0) or (i = 0) then
-                    insPart(arr, i, i+999);
+                    selPart(arr, i, i+999);
                 end;
                 t2:=Now();
                 writeln('Time of sorting(1000 el.) = ',MillisecondsBetween(t1,t2));
@@ -388,7 +388,7 @@ begin
                 for i:=0 to 99999 do
                 begin
                   if (i mod 100 = 0) or (i = 0) then
-                    insPart(arr, i, i+99);
+                    selPart(arr, i, i+99);
                 end;
                 t2:=Now();
                 writeln('Time of sorting(100 el.) = ',MillisecondsBetween(t1,t2));
@@ -404,7 +404,7 @@ begin
                 for i:=0 to 99999 do
                 begin
                   if (i mod 10 = 0) or (i = 0) then
-                    insPart(arr, i, i+9);
+                    selPart(arr, i, i+9);
                 end;
                 t2:=Now();
                 writeln('Time of sorting(10 el.) = ',MillisecondsBetween(t1,t2));
@@ -418,7 +418,7 @@ begin
             end;
             2: begin
                 readN(arrN);
-                insertSort(arrN);
+                selectSort(arrN);
             end;
 
 
