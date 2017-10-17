@@ -5,6 +5,30 @@
 uses
   SysUtils,
   DateUtils;
+  procedure bubPart(var arr: array of integer; fst, last: integer);
+  var i,j,k: integer;
+  begin
+    for i := fst to last do
+      for j := fst to last do
+        if arr[j] > arr[j+1] then
+        begin
+          k := arr[j];
+          arr[j] := arr[j+1];
+          arr[j+1] := k;
+        end;
+  end;
+  procedure BubbleSort(var arr: array of integer);
+  var i,j,k: integer;
+  begin
+    for i := 0 to high(arr) do
+      for j := 0 to high(arr)-i do
+        if arr[j] > arr[j+1] then
+        begin
+          k := arr[j];
+          arr[j] := arr[j+1];
+          arr[j+1] := k
+        end;
+  end;
   procedure InsPar(var arr: array of integer; fst, last: integer);
   var
     i, j, buf: integer;
@@ -570,6 +594,116 @@ begin
           end;
         end;
    end;
+  end;
+  4:begin
+    while true do
+    begin
+      writeln('1. Sort by part 2. Sort N array 3. Exit to general menu');
+      readln(menu);
+      case menu of
+      1:begin
+        readFull(arr);
+        t1:=Now();
+        BubbleSort(arr);
+        t2:=Now();
+        writeln('Time of sorting(100000 el.) = ',MillisecondsBetween(t1,t2));
+        rewrite(sorted);
+        for i:=0 to 99999 do
+        begin
+          str := IntToStr(arr[i]);
+          writeln(sorted, str);
+        end;
+        close(sorted);
+              readFull(arr);
+              t1:=Now();
+              for i:=0 to 99999 do
+                begin
+                  if (i mod 10000 = 0) or (i = 0) then
+                    bubPart(arr, i, i+9999);
+                end;
+                t2:=Now();
+                writeln('Time of sorting(10000 el.) = ',MillisecondsBetween(t1,t2));
+                rewrite(sorted10);
+                for i:=0 to high(arr) do
+                begin
+                  str := IntToStr(arr[i]);
+                  writeln(sorted10, str);
+                end;
+                close(sorted10);
+                readFull(arr);
+                t1:=Now();
+                for i:=0 to 99999 do
+                begin
+                  if (i mod 1000 = 0) or (i = 0) then
+                    bubPart(arr, i, i+999);
+                end;
+                t2:=Now();
+                writeln('Time of sorting(1000 el.) = ',MillisecondsBetween(t1,t2));
+                rewrite(sorted100);
+                for i:=0 to high(arr) do
+                begin
+                  str := IntToStr(arr[i]);
+                  writeln(sorted100, str);
+                end;
+                close(sorted100);
+                readFull(arr);
+                t1:=Now();
+                for i:=0 to 99999 do
+                begin
+                  if (i mod 100 = 0) or (i = 0) then
+                    bubPart(arr, i, i+99);
+                end;
+                t2:=Now();
+                writeln('Time of sorting(100 el.) = ',MillisecondsBetween(t1,t2));
+                rewrite(sortedTh);
+                for i:=0 to high(arr) do
+                begin
+                  str := IntToStr(arr[i]);
+                  writeln(sortedTh, str);
+                end;
+                close(sortedTh);
+                readFull(arr);
+                t1:=Now();
+                for i:=0 to 99999 do
+                begin
+                  if (i mod 10 = 0) then
+                    bubPart(arr, i, i+9);
+                end;
+                t2:=Now();
+                writeln('Time of sorting(10 el.) = ',MillisecondsBetween(t1,t2));
+                rewrite(sortedTen);
+                for i:=0 to high(arr) do
+                begin
+                  str := IntToStr(arr[i]);
+                  writeln(sortedTen, str);
+                end;
+                close(sortedTen);
+      end;
+      2:begin
+          readN(arrN);
+          for i:=0 to high(arrN) do
+            write(' ', arrN[i]);
+          writeln;
+          t1:=Now();
+          BubbleSort(arrN);
+          t2:=Now();
+          for i:=0 to high(arrN) do
+            write(' ', arrN[i]);
+          writeln;
+          rewrite(sorted);
+          for i:=0 to high(arrN) do
+          begin
+           str := IntToStr(arrN[i]);
+           writeln(sorted, str);
+           end;
+          close(sorted);
+          writeln('Time of sorting = ',MillisecondsBetween(t1,t2));
+      end;
+      3:begin
+          break;
+      end;
+    end;
+  end;
   end;
 end;
 end;
